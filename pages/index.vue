@@ -217,12 +217,12 @@ const plants = ref([
                   <h3 class="text-16px font-bold text-blue mb-12px leading-tight">{{ plant.name }}</h3>
                   
                   <div class="flex gap-8px mt-20px">
-                    <Button variant="blue" class="text-12px font-medium">
+                    <Button variant="blue" class="text-12px font-medium hover:bg-blue/90 transition-colors duration-300">
                       Подробнее
                     </Button>
-                    <Button variant="white" class="text-12px whitespace-nowrap font-medium border-2 border-green text-green hover:bg-green hover:text-white">
+                    <button class="text-12px whitespace-nowrap font-medium border-2 border-green text-green bg-white hover:bg-green hover:text-white hover:border-green transition-all duration-300 px-12px py-8px rounded-lg">
                       В корзину
-                    </Button>
+                    </button>
                   </div>
                 </div>
                 
