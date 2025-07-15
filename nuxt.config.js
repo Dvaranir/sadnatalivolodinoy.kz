@@ -52,6 +52,16 @@ export default defineNuxtConfig({
 		"@nuxt/icon",
 	],
 
+	icon: {
+		mode: 'svg',
+		serverBundle: {
+			collections: ['mdi', 'heroicons', 'lucide']
+		},
+		clientBundle: {
+			scan: true
+		}
+	},
+
 	i18n: {
 		locales: [
 			{

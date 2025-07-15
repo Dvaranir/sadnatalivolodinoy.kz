@@ -93,7 +93,9 @@ const plants = ref([
     <Button @click="openContactModal" tag="a" href="#" variant="white" class="font-24px">{{ t('home.contactButton') }}</Button>
   </TopHeadingSection>
 
-  <Icon name="mdi:moon-waning-crescent" class="w-8px h-5px text-gray-11 transition-transform duration-300" />
+  <div class="w-8px h-5px text-gray-11 transition-transform duration-300 flex items-center justify-center">
+    <Icon name="mdi:moon-waning-crescent" class="w-full h-full" />
+  </div>
 
   <section class="py-64px px-16px bg-gradient-to-br from-creme to-gray-darker relative overflow-hidden">
     <div class="absolute inset-0 opacity-30">
