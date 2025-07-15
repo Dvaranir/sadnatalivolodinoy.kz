@@ -331,49 +331,11 @@ if (!plant.value) {
         </div>
       </div>
       
-      <div class="mt-12">
-        <div class="flex items-center gap-4 mb-8">
-          <div class="w-12 h-12 bg-gradient-to-br from-green to-blue rounded-2xl flex items-center justify-center">
-            <Icon name="mdi:heart" class="w-6 h-6 text-white" />
-          </div>
-          <h2 class="text-2xl font-bold text-blue">Вам возможно понравится</h2>
-        </div>
-        
-        <div class="relative">
-          <Swiper
-            :modules="swiperModules"
-            :slides-per-view="1"
-            :space-between="20"
-            :autoplay="{
-              delay: 3000,
-              disableOnInteraction: false,
-            }"
-            :breakpoints="{
-              640: {
-                slidesPerView: 2,
-                spaceBetween: 20,
-              },
-              768: {
-                slidesPerView: 3,
-                spaceBetween: 20,
-              },
-              1024: {
-                slidesPerView: 4,
-                spaceBetween: 20,
-              },
-            }"
-            class="related-plants-swiper"
-          >
-            <SwiperSlide v-for="relatedPlant in relatedPlants" :key="relatedPlant.id">
-              <Plant
-                :plant="relatedPlant"
-                :show-tags="false"
-                :all-tags="allTags"
-              />
-            </SwiperSlide>
-          </Swiper>
-        </div>
-      </div>
+      <PlantsSlider 
+        title="Вам возможно понравится"
+        :plants="relatedPlants"
+        :all-tags="allTags"
+      />
       
       <ShareModal
         :is-open="isShareModalOpen"
