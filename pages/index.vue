@@ -49,7 +49,7 @@ const categories = ref([
 const plants = ref([
   {
     id: 1,
-    name: 'Розовый куст',
+    name: 'Розовый куст фыв фыв фыв фы вфыв фы вфывфыв',
     price: '2500',
     image: TopBackgroundImage
   },
@@ -214,7 +214,7 @@ const plants = ref([
                 <div class="p-24px bg-white relative">
                   <div class="absolute top-0 right-0 w-0 h-0 border-l-[30px] border-l-transparent border-b-[30px] border-b-green opacity-10"></div>
                   
-                  <h3 class="text-16px font-bold text-blue mb-12px leading-tight">{{ plant.name }}</h3>
+                  <h3 class="text-16px font-bold text-blue mb-12px leading-tight h-[40px] overflow-hidden line-clamp-2">{{ plant.name }}</h3>
                   
                   <div class="flex gap-8px mt-20px">
                     <Button variant="blue" class="text-12px font-medium hover:bg-blue/90 transition-colors duration-300">
