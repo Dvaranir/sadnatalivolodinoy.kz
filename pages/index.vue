@@ -1,6 +1,7 @@
 <script setup>
 import TopBackgroundImage from '~/assets/images/pages/home/top_background.jpeg';
 import { Swiper, SwiperSlide } from 'swiper/vue';
+import { Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 
@@ -95,33 +96,70 @@ const plants = ref([
   </TopHeadingSection>
 
   <!-- Categories Slider -->
-  <section class="py-64px px-16px bg-creme">
-    <div class="max-w-7xl mx-auto">
-      <h2 class="text-48px font-bold text-blue text-center mb-48px max-md:text-32px">Категории</h2>
-      <div class="relative">
+  <section class="py-64px px-16px bg-gradient-to-br from-creme to-gray-darker relative overflow-hidden">
+    <div class="absolute inset-0 opacity-30">
+      <div class="absolute top-20px left-20px w-3px h-3px bg-green rounded-full"></div>
+      <div class="absolute top-40px right-40px w-2px h-2px bg-blue rounded-full"></div>
+      <div class="absolute bottom-60px left-60px w-4px h-4px bg-green rounded-full"></div>
+      <div class="absolute bottom-40px right-20px w-2px h-2px bg-blue rounded-full"></div>
+      <div class="absolute top-60px left-1/3 w-3px h-3px bg-green rounded-full"></div>
+      <div class="absolute bottom-80px right-1/3 w-2px h-2px bg-blue rounded-full"></div>
+    </div>
+    
+    <div class="max-w-7xl mx-auto relative z-10">
+      <div class="text-center mb-56px">
+        <h2 class="text-56px font-bold text-blue mb-16px max-md:text-40px">Категории</h2>
+        <div class="w-24px h-2px bg-green mx-auto"></div>
+      </div>
+      
+      <div class="relative pt-32px pb-48px px-8px">
         <Swiper
           :slides-per-view="1"
-          :space-between="20"
+          :space-between="30"
           :breakpoints="{
-            450: { slidesPerView: 2, spaceBetween: 20 },
-            768: { slidesPerView: 3, spaceBetween: 30 },
-            1024: { slidesPerView: 4, spaceBetween: 40 }
+            450: { slidesPerView: 1.5, spaceBetween: 20 },
+            768: { slidesPerView: 2.5, spaceBetween: 30 },
+            1024: { slidesPerView: 3.5, spaceBetween: 40 }
           }"
           :pagination="{ clickable: true }"
-          class="categories-swiper"
+          :centered-slides="false"
+          :loop="true"
+          :autoplay="{ delay: 4000, disableOnInteraction: false }"
+          :modules="[Pagination, Autoplay]"
+          class="categories-swiper !overflow-visible"
         >
           <SwiperSlide v-for="category in categories" :key="category.id">
-            <div class="bg-white rounded-lg p-24px shadow-lg hover:shadow-xl transition-shadow duration-300">
-              <div class="aspect-[4/3] mb-20px overflow-hidden rounded-lg">
-                <img :src="category.image" :alt="category.name" class="w-full h-full object-cover">
-              </div>
-              <h3 class="text-20px font-semibold text-blue mb-8px">{{ category.name }}</h3>
-              <p class="text-16px text-gray-600 mb-16px">{{ category.count }} растений</p>
-              <div class="flex gap-8px">
-                <Button variant="blue" class="text-12px flex-1">Подробнее</Button>
-                <button class="p-8px bg-green text-white rounded-md hover:bg-green/90 transition-colors">
-                  <Icon name="lucide:share-2" class="w-16px h-16px" />
-                </button>
+            <div class="relative group">
+              <!-- Main Card -->
+              <div class="bg-white rounded-2xl overflow-hidden shadow-2xl hover:shadow-3xl transition-all duration-500 transform hover:-translate-y-2 hover:rotate-1 hover:scale-105">
+                <!-- Image Section with Overlay -->
+                <div class="relative aspect-[3/2] overflow-hidden">
+                  <img :src="category.image" :alt="category.name" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                  
+                  <!-- Count Badge -->
+                  <div class="absolute top-16px right-16px bg-green text-white px-12px py-6px rounded-full text-14px font-semibold">
+                    {{ category.count }}
+                  </div>
+                  
+                  <!-- Category Name Overlay -->
+                  <div class="absolute bottom-20px left-20px right-20px">
+                    <h3 class="text-24px font-bold text-white mb-4px drop-shadow-lg">{{ category.name }}</h3>
+                    <p class="text-14px text-white/90">{{ category.count }} растений</p>
+                  </div>
+                </div>
+                
+                <!-- Action Section -->
+                <div class="p-20px bg-gradient-to-r from-blue to-blue/90">
+                  <div class="flex items-center gap-12px">
+                    <Button variant="white" class="text-14px flex-1 font-medium">
+                      Подробнее
+                    </Button>
+                    <button class="p-10px bg-green text-white rounded-full hover:bg-green/90 transition-all duration-300 hover:scale-110 shadow-lg">
+                      <Icon name="lucide:share-2" class="w-18px h-18px" />
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </SwiperSlide>
@@ -134,7 +172,7 @@ const plants = ref([
   <section class="py-64px px-16px bg-white">
     <div class="max-w-7xl mx-auto">
       <h2 class="text-48px font-bold text-blue text-center mb-48px max-md:text-32px">Растения</h2>
-      <div class="relative">
+      <div class="relative pt-32px pb-48px px-8px">
         <Swiper
           :slides-per-view="1"
           :space-between="20"
@@ -144,7 +182,10 @@ const plants = ref([
             1024: { slidesPerView: 4, spaceBetween: 40 }
           }"
           :pagination="{ clickable: true }"
-          class="plants-swiper"
+          :loop="true"
+          :autoplay="{ delay: 3500, disableOnInteraction: false }"
+          :modules="[Pagination, Autoplay]"
+          class="plants-swiper !overflow-visible"
         >
           <SwiperSlide v-for="plant in plants" :key="plant.id">
             <div class="bg-gray rounded-lg p-24px shadow-lg hover:shadow-xl transition-shadow duration-300">
@@ -212,5 +253,15 @@ const plants = ref([
 
 :deep(.swiper-pagination) {
   bottom: -40px;
+}
+
+:deep(.categories-swiper .swiper-wrapper),
+:deep(.plants-swiper .swiper-wrapper) {
+  overflow: visible !important;
+}
+
+:deep(.categories-swiper .swiper-slide),
+:deep(.plants-swiper .swiper-slide) {
+  overflow: visible !important;
 }
 </style>
