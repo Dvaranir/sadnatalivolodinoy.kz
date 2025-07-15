@@ -3,13 +3,21 @@ const props = defineProps({
   plant: {
     type: Object,
     required: true
+  },
+  showTags: {
+    type: Boolean,
+    default: false
+  },
+  allTags: {
+    type: Array,
+    default: () => []
   }
 })
 
 const isShareModalOpen = ref(false)
 
 const shareData = computed(() => ({
-  url: `${window.location.origin}/plant/${props.plant.id || props.plant.slug || props.plant.name}`,
+  url: `${window.location.origin}/plants/${props.plant.slug}`,
   title: `${props.plant.name} - ${props.plant.price} ₸`
 }))
 
@@ -20,6 +28,14 @@ const openShareModal = () => {
 const closeShareModal = () => {
   isShareModalOpen.value = false
 }
+
+const displayTags = computed(() => {
+  if (!props.showTags || !props.plant.tags || props.plant.tags.length === 0) return []
+  return props.plant.tags.map(tagId => {
+    const tag = props.allTags.find(t => t.id === tagId)
+    return tag ? { id: tagId, name: tag.name } : { id: tagId, name: tagId }
+  })
+})
 </script>
 
 <template>
@@ -46,12 +62,25 @@ const closeShareModal = () => {
         <h3 class="text-16px font-bold text-blue mb-12px leading-tight h-[40px] overflow-hidden line-clamp-2">{{ plant.name }}</h3>
         
         <div class="flex gap-8px mt-20px">
-          <Button variant="blue" class="text-12px font-medium hover:bg-blue/90 transition-colors duration-300">
+          <NuxtLink :to="`/plants/${plant.slug}`" class="text-12px font-medium bg-blue text-white px-12px py-8px rounded-lg hover:bg-blue/90 transition-colors duration-300 inline-block text-center">
             Подробнее
-          </Button>
+          </NuxtLink>
           <button class="text-12px whitespace-nowrap font-medium border-2 border-green text-green bg-white hover:bg-green hover:text-white hover:border-green transition-all duration-300 px-12px py-8px rounded-lg">
             В корзину
           </button>
+        </div>
+        
+        <div v-if="showTags && displayTags.length > 0" class="mt-12px">
+          <div class="flex flex-wrap gap-x-2 text-12px leading-tight max-h-[16px] overflow-hidden">
+            <NuxtLink 
+              v-for="(tag, index) in displayTags" 
+              :key="index"
+              :to="`/plants?tags=${tag.id}`"
+              class="text-blue hover:text-blue/80 transition-colors duration-200 whitespace-nowrap"
+            >
+              #{{ tag.name }}
+            </NuxtLink>
+          </div>
         </div>
       </div>
       
