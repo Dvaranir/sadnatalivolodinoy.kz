@@ -118,6 +118,16 @@ const closeShareModal = () => {
   isShareModalOpen.value = false
 }
 
+const isAddingToCart = ref(false)
+
+const addToCart = async () => {
+  isAddingToCart.value = true
+  // Simulate API call
+  await new Promise(resolve => setTimeout(resolve, 1000))
+  isAddingToCart.value = false
+  // Show success message or redirect
+}
+
 const swiperModules = [Autoplay, Pagination]
 
 if (!plant.value) {
@@ -133,66 +143,92 @@ if (!plant.value) {
     <div class="container mx-auto px-4 py-8">
       <Breadcrumbs :items="breadcrumbs" />
       
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-        <div class="space-y-4">
-          <h1 class="text-3xl font-bold text-blue">{{ plant.name }}</h1>
-          
-          <div class="flex flex-wrap gap-2">
-            <NuxtLink
-              v-for="tag in displayTags"
-              :key="tag.id"
-              :to="`/plants?tags=${tag.id}`"
-              class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green/10 text-green hover:bg-green hover:text-white transition-colors duration-200"
-            >
-              #{{ tag.name }}
-            </NuxtLink>
-          </div>
-        </div>
-        
-        <div class="lg:order-first">
-          <div class="relative rounded-3xl overflow-hidden shadow-2xl">
-            <Swiper
-              :modules="swiperModules"
-              :slides-per-view="1"
-              :space-between="0"
-              :autoplay="{
-                delay: 3000,
-                disableOnInteraction: false,
-              }"
-              :pagination="{
-                clickable: true,
-                dynamicBullets: true,
-              }"
-              class="h-96 w-full"
-            >
-              <SwiperSlide v-for="(image, index) in plant.images" :key="index">
+      <div class="relative mb-12">
+        <div class="relative h-[70vh] min-h-[600px] rounded-3xl overflow-hidden shadow-2xl">
+          <Swiper
+            :modules="swiperModules"
+            :slides-per-view="1"
+            :space-between="0"
+            :autoplay="{
+              delay: 4000,
+              disableOnInteraction: false,
+            }"
+            :pagination="{
+              clickable: true,
+              dynamicBullets: true,
+            }"
+            class="h-full w-full"
+          >
+            <SwiperSlide v-for="(image, index) in plant.images" :key="index">
+              <div class="relative h-full">
                 <img :src="image" :alt="`${plant.name} - изображение ${index + 1}`" class="w-full h-full object-cover">
-              </SwiperSlide>
-            </Swiper>
-            
-            <div class="absolute top-4 left-4 bg-green text-white px-4 py-2 rounded-full text-lg font-bold shadow-lg z-10">
-              {{ plant.price }} ₸
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+              </div>
+            </SwiperSlide>
+          </Swiper>
+          
+          <div class="absolute top-8 left-8 bg-gradient-to-r from-green to-green/80 text-white px-6 py-3 rounded-2xl text-2xl font-bold shadow-2xl z-10 backdrop-blur-sm">
+            {{ plant.price }} ₸
+          </div>
+          
+          <div class="absolute top-8 right-8 z-10">
+            <button 
+              @click="openShareModal"
+              class="w-14 h-14 bg-white/20 backdrop-blur-md text-white rounded-2xl hover:bg-white/30 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-110 flex items-center justify-center"
+            >
+              <Icon name="mdi:share" class="w-6 h-6" />
+            </button>
+          </div>
+          
+          <div class="absolute bottom-0 left-0 right-0 p-4 z-10">
+            <div class="bg-white/95 backdrop-blur-lg rounded-3xl p-3 px-6 shadow-2xl">
+              <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
+                <div class="flex-1">
+                  <h1 class="text-3xl lg:text-4xl font-bold text-blue mb-3 leading-tight">{{ plant.name }}</h1>
+                  
+                  <div class="flex flex-wrap gap-2">
+                    <NuxtLink
+                      v-for="tag in displayTags"
+                      :key="tag.id"
+                      :to="`/plants?tags=${tag.id}`"
+                      class="inline-flex items-center px-3 py-1 rounded-full text-16px font-medium bg-green/10 text-green hover:bg-green hover:text-white transition-all duration-200 hover:scale-105"
+                    >
+                      #{{ tag.name }}
+                    </NuxtLink>
+                  </div>
+                </div>
+                
+                <div class="flex flex-col sm:flex-row gap-3 lg:min-w-[250px]">
+                  <button 
+                    @click="addToCart"
+                    :disabled="isAddingToCart"
+                    class="flex-1 bg-gradient-to-r from-green to-green/80 text-white font-bold py-3 px-5 rounded-2xl hover:from-green/90 hover:to-green/70 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                  >
+                    <Icon :name="isAddingToCart ? 'mdi:loading' : 'mdi:cart-plus'" :class="isAddingToCart ? 'animate-spin' : ''" class="w-5 h-5" />
+                    {{ isAddingToCart ? 'Добавляем...' : 'В корзину' }}
+                  </button>
+                  
+                  <button class="bg-gradient-to-r from-blue to-blue/80 text-white font-bold py-3 px-5 rounded-2xl hover:from-blue/90 hover:to-blue/70 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center">
+                    <Icon name="mdi:heart-outline" class="w-5 h-5" />
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
           
-          <div class="flex gap-4 mt-6">
-            <button class="flex-1 bg-green text-white font-medium py-3 px-6 rounded-2xl hover:bg-green/90 transition-colors duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
-              <Icon name="mdi:cart-plus" class="w-5 h-5 mr-2 inline" />
-              В корзину
-            </button>
-            <button 
-              @click="openShareModal"
-              class="bg-blue text-white font-medium py-3 px-6 rounded-2xl hover:bg-blue/90 transition-colors duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
-            >
-              <Icon name="mdi:share" class="w-5 h-5" />
-            </button>
-          </div>
+          <div class="absolute -top-4 -right-4 w-8 h-8 bg-green rounded-full opacity-60 animate-pulse"></div>
+          <div class="absolute -bottom-4 -left-4 w-6 h-6 bg-blue rounded-full opacity-60 animate-pulse delay-500"></div>
         </div>
       </div>
       
-      <div class="bg-white rounded-3xl p-8 shadow-xl">
-        <h2 class="text-2xl font-bold text-blue mb-6">Описание растения</h2>
-        <div class="prose prose-lg max-w-none text-gray-700" v-html="plant.description"></div>
+      <div class="bg-white rounded-3xl p-8 shadow-xl transform hover:scale-[1.02] transition-all duration-500">
+        <div class="flex items-center gap-4 mb-6">
+          <div class="w-12 h-12 bg-gradient-to-br from-green to-blue rounded-2xl flex items-center justify-center">
+            <Icon name="mdi:leaf" class="w-6 h-6 text-white" />
+          </div>
+          <h2 class="text-2xl font-bold text-blue">Описание растения</h2>
+        </div>
+        <div class="prose prose-lg max-w-none text-gray-700 leading-relaxed" v-html="plant.description"></div>
       </div>
       
       <ShareModal
