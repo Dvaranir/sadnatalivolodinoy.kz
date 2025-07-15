@@ -214,7 +214,7 @@ body {
 }
 
 .swiper-pagination {
-	bottom: 110px !important;
+	bottom: 20px !important;
 	z-index: 20 !important;
 }
 
@@ -225,4 +225,14 @@ body {
 
 .backdrop-blur-lg {
 	backdrop-filter: blur(16px);
+}
+
+/* Related plants swiper styles */
+.related-plants-swiper {
+	padding-bottom: 20px;
+}
+
+.related-plants-swiper .swiper-slide {
+	height: auto;
+	display: flex;
 }
