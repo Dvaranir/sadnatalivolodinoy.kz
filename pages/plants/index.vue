@@ -104,12 +104,19 @@ const updateFilters = () => {
   router.push({ query })
 }
 
+const breadcrumbs = ref([
+  { label: 'Главная', to: '/' },
+  { label: 'Каталог растений' }
+])
+
 watch([searchQuery, selectedCategory, selectedTags], updateFilters)
 </script>
 
 <template>
   <div class="min-h-screen bg-creme">
     <div class="container mx-auto px-4 py-8">
+      <Breadcrumbs :items="breadcrumbs" />
+      
       <div class="mb-8">
         <h1 class="text-3xl font-bold text-blue mb-6">Каталог растений</h1>
         
