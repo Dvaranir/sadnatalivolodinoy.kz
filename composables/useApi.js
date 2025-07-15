@@ -1,9 +1,9 @@
 export const useApi = () => {
   const config = useRuntimeConfig()
-  const baseUrl = config.public.apiUrl || 'https://yp-dev-crm.checkngo.pro'
+  const baseUrl = config.public.apiUrl || 'http://localhost:1337'
 
   const buildUrl = (endpoint, params = {}) => {
-    const url = new URL(endpoint, baseUrl)
+    const url = new URL(`/api${endpoint}`, baseUrl)
     Object.entries(params).forEach(([key, value]) => {
       if (value !== undefined && value !== null) {
         url.searchParams.append(key, value)
@@ -13,7 +13,20 @@ export const useApi = () => {
   }
 
   const send = async (url, options = {}) => {
-    const response = await fetch(url, options)
+    const defaultHeaders = {
+      'Content-Type': 'application/json',
+      ...options.headers
+    }
+
+    const response = await fetch(url, {
+      ...options,
+      headers: defaultHeaders
+    })
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+
     return await response.json()
   }
 
@@ -23,55 +36,19 @@ export const useApi = () => {
   }
 
   const post = async (endpoint, data = {}, options = {}) => {
-    const { json = false } = options
     const url = buildUrl(endpoint)
-    
-    let body
-    let headers = {}
-
-    if (json) {
-      body = JSON.stringify(data)
-      headers['Content-Type'] = 'application/json'
-    } else {
-      body = new FormData()
-      Object.entries(data).forEach(([key, value]) => {
-        if (value !== undefined && value !== null) {
-          body.append(key, value)
-        }
-      })
-    }
-
     return await send(url, {
       method: 'POST',
-      body,
-      headers,
+      body: JSON.stringify({ data }),
       ...options
     })
   }
 
   const put = async (endpoint, data = {}, options = {}) => {
-    const { json = false } = options
     const url = buildUrl(endpoint)
-    
-    let body
-    let headers = {}
-
-    if (json) {
-      body = JSON.stringify(data)
-      headers['Content-Type'] = 'application/json'
-    } else {
-      body = new FormData()
-      Object.entries(data).forEach(([key, value]) => {
-        if (value !== undefined && value !== null) {
-          body.append(key, value)
-        }
-      })
-    }
-
     return await send(url, {
       method: 'PUT',
-      body,
-      headers,
+      body: JSON.stringify({ data }),
       ...options
     })
   }
@@ -81,10 +58,35 @@ export const useApi = () => {
     return await send(url, { method: 'DELETE' })
   }
 
+  const findOne = async (collection, id, params = {}) => {
+    return await get(`/${collection}/${id}`, params)
+  }
+
+  const findMany = async (collection, params = {}) => {
+    return await get(`/${collection}`, params)
+  }
+
+  const create = async (collection, data = {}, options = {}) => {
+    return await post(`/${collection}`, data, options)
+  }
+
+  const update = async (collection, id, data = {}, options = {}) => {
+    return await put(`/${collection}/${id}`, data, options)
+  }
+
+  const remove = async (collection, id, params = {}) => {
+    return await del(`/${collection}/${id}`, params)
+  }
+
   return {
     get,
     post,
     put,
-    delete: del
+    delete: del,
+    findOne,
+    findMany,
+    create,
+    update,
+    remove
   }
 }
