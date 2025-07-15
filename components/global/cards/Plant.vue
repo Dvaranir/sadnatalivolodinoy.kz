@@ -15,6 +15,7 @@ const props = defineProps({
 })
 
 const isShareModalOpen = ref(false)
+const userStore = useUserStore()
 
 const shareData = computed(() => ({
   url: `${window.location.origin}/plants/${props.plant.slug}`,
@@ -29,10 +30,34 @@ const closeShareModal = () => {
   isShareModalOpen.value = false
 }
 
+const toggleFavorite = () => {
+  userStore.toggleFavorite(props.plant.id)
+}
+
+const isFavorite = computed(() => {
+  return userStore.isFavorite(props.plant.id)
+})
+
+const addToBasket = () => {
+  userStore.addToBasket(props.plant.id)
+}
+
+const removeFromBasket = () => {
+  userStore.removeFromBasket(props.plant.id)
+}
+
+const basketQuantity = computed(() => {
+  return userStore.getBasketItemQuantity(props.plant.id)
+})
+
+const isInBasket = computed(() => {
+  return userStore.isInBasket(props.plant.id)
+})
+
 const displayTags = computed(() => {
   if (!props.showTags || !props.plant.tags || props.plant.tags.length === 0) return []
   return props.plant.tags.map(tagId => {
-    const tag = props.allTags.find(t => t.id === tagId)
+      const tag = props.allTags.find(t => t.id === tagId)
     return tag ? { id: tagId, name: tag.name } : { id: tagId, name: tagId }
   })
 })
@@ -49,7 +74,14 @@ const displayTags = computed(() => {
           {{ plant.price }} ₸
         </div>
         
-        <div class="absolute top-16px right-16px">
+        <div class="absolute top-16px right-16px flex gap-8px">
+          <button 
+            class="w-40px h-40px bg-white/90 backdrop-blur-sm rounded-full hover:bg-white hover:scale-110 transition-all duration-300 shadow-lg flex items-center justify-center"
+            :class="isFavorite ? 'text-red-500' : 'text-gray-400'"
+            @click="toggleFavorite"
+          >
+            <Icon :name="isFavorite ? 'mdi:heart' : 'mdi:heart-outline'" class="w-20px h-20px" />
+          </button>
           <button class="w-40px h-40px bg-white/90 backdrop-blur-sm text-blue rounded-full hover:bg-white hover:scale-110 transition-all duration-300 shadow-lg flex items-center justify-center" @click="openShareModal">
             <Icon name="mdi:share" class="w-20px h-20px" />
           </button>
@@ -65,7 +97,28 @@ const displayTags = computed(() => {
           <NuxtLink :to="`/plants/${plant.slug}`" class="text-12px font-medium bg-blue text-white px-12px py-8px rounded-lg hover:bg-blue/90 transition-colors duration-300 inline-block text-center">
             Подробнее
           </NuxtLink>
-          <button class="text-12px whitespace-nowrap font-medium border-2 border-green text-green bg-white hover:bg-green hover:text-white hover:border-green transition-all duration-300 px-12px py-8px rounded-lg">
+          
+          <div v-if="isInBasket" class="flex items-center gap-4px">
+            <button 
+              @click="removeFromBasket"
+              class="text-12px font-medium w-24px h-24px rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors duration-300 flex items-center justify-center"
+            >
+              -
+            </button>
+            <span class="text-12px font-medium text-green px-8px">{{ basketQuantity }}</span>
+            <button 
+              @click="addToBasket"
+              class="text-12px font-medium w-24px h-24px rounded-lg bg-green text-white hover:bg-green/90 transition-colors duration-300 flex items-center justify-center"
+            >
+              +
+            </button>
+          </div>
+          
+          <button 
+            v-else
+            @click="addToBasket"
+            class="text-12px whitespace-nowrap font-medium border-2 border-green text-green bg-white hover:bg-green hover:text-white hover:border-green transition-all duration-300 px-12px py-8px rounded-lg"
+          >
             В корзину
           </button>
         </div>

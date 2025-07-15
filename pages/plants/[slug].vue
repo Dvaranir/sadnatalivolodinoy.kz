@@ -7,6 +7,7 @@ import TopBackgroundImage from '~/assets/images/pages/home/top_background.jpeg'
 
 const route = useRoute()
 const router = useRouter()
+const userStore = useUserStore()
 
 const allTags = ref([
   { id: 'easy-care', name: 'Простой уход' },
@@ -168,13 +169,29 @@ const closeShareModal = () => {
 
 const isAddingToCart = ref(false)
 
-const addToCart = async () => {
-  isAddingToCart.value = true
-  // Simulate API call
-  await new Promise(resolve => setTimeout(resolve, 1000))
-  isAddingToCart.value = false
-  // Show success message or redirect
+const addToBasket = () => {
+  userStore.addToBasket(plant.value.id)
 }
+
+const removeFromBasket = () => {
+  userStore.removeFromBasket(plant.value.id)
+}
+
+const basketQuantity = computed(() => {
+  return userStore.getBasketItemQuantity(plant.value.id)
+})
+
+const isInBasket = computed(() => {
+  return userStore.isInBasket(plant.value.id)
+})
+
+const toggleFavorite = () => {
+  userStore.toggleFavorite(plant.value.id)
+}
+
+const isFavorite = computed(() => {
+  return userStore.isFavorite(plant.value.id)
+})
 
 const swiperModules = [Autoplay, Pagination]
 
@@ -246,18 +263,38 @@ if (!plant.value) {
               <h1 class="text-3xl lg:text-4xl font-bold text-blue mb-8 leading-tight">{{ plant.name }}</h1>
               
               <div class="space-y-4">
+                <div v-if="isInBasket" class="flex items-center gap-4 mb-4">
+                  <button 
+                    @click="removeFromBasket"
+                    class="w-12 h-12 rounded-xl bg-red-500 text-white hover:bg-red-600 transition-colors duration-300 flex items-center justify-center text-xl font-bold"
+                  >
+                    -
+                  </button>
+                  <span class="text-2xl font-bold text-green px-4">{{ basketQuantity }}</span>
+                  <button 
+                    @click="addToBasket"
+                    class="w-12 h-12 rounded-xl bg-green text-white hover:bg-green/90 transition-colors duration-300 flex items-center justify-center text-xl font-bold"
+                  >
+                    +
+                  </button>
+                </div>
+                
                 <button 
-                  @click="addToCart"
-                  :disabled="isAddingToCart"
-                  class="w-full bg-gradient-to-r from-green to-green/80 text-white font-bold py-4 px-6 rounded-2xl hover:from-green/90 hover:to-green/70 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                  v-else
+                  @click="addToBasket"
+                  class="w-full bg-gradient-to-r from-green to-green/80 text-white font-bold py-4 px-6 rounded-2xl hover:from-green/90 hover:to-green/70 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center gap-2"
                 >
-                  <Icon :name="isAddingToCart ? 'mdi:loading' : 'mdi:cart-plus'" :class="isAddingToCart ? 'animate-spin' : ''" class="w-5 h-5" />
-                  {{ isAddingToCart ? 'Добавляем...' : 'В корзину' }}
+                  <Icon name="mdi:cart-plus" class="w-5 h-5" />
+                  В корзину
                 </button>
                 
-                <button class="w-full bg-gradient-to-r from-blue to-blue/80 text-white font-bold py-4 px-6 rounded-2xl hover:from-blue/90 hover:to-blue/70 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center gap-2">
-                  <Icon name="mdi:heart-outline" class="w-5 h-5" />
-                  В избранное
+                <button 
+                  @click="toggleFavorite"
+                  class="w-full bg-gradient-to-r from-blue to-blue/80 text-white font-bold py-4 px-6 rounded-2xl hover:from-blue/90 hover:to-blue/70 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center gap-2"
+                  :class="isFavorite ? 'from-red-500 to-red-400 hover:from-red-600 hover:to-red-500' : ''"
+                >
+                  <Icon :name="isFavorite ? 'mdi:heart' : 'mdi:heart-outline'" class="w-5 h-5" />
+                  {{ isFavorite ? 'Убрать из избранного' : 'В избранное' }}
                 </button>
               </div>
             </div>

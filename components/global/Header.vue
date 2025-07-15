@@ -45,7 +45,7 @@ const scrollToTop = () => {
 				<Navigation :mode="props.mode" />
 			</div>
 			<div class="max-sm:hidden order-3">
-				<ContactsButton :mode="props.mode" />
+				<BasketFavoriteButtons :mode="props.mode" />
 			</div>
 		</div>
 		
@@ -57,7 +57,7 @@ const scrollToTop = () => {
 			</div>
 			<div class="max-lg:hidden flex items-center space-x-4">
 				<LanguageSwitcher :mode="props.mode" />
-				<ContactsButton :mode="props.mode" />
+				<BasketFavoriteButtons :mode="props.mode" />
 			</div>
 
 			<button 
@@ -104,7 +104,7 @@ const scrollToTop = () => {
 				<Navigation :mode="props.mode" @navigate="toggleMenu" />
 				<div class="mt-auto flex flex-col gap-16px w-fit items-start">
 					<LanguageSwitcher :mode="props.mode" />
-					<ContactsButton :mode="props.mode" />
+					<BasketFavoriteButtons :mode="props.mode" />
 				</div>
 				
 			</div>
