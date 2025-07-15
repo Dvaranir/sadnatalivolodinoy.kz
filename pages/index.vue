@@ -130,34 +130,7 @@ const plants = ref([
           class="categories-swiper !overflow-visible"
         >
           <SwiperSlide v-for="category in categories" :key="category.id">
-            <div class="relative group">
-              <div class="bg-white rounded-2xl overflow-hidden shadow-2xl hover:shadow-3xl transition-all duration-500 transform hover:-translate-y-2 hover:rotate-1 hover:scale-105">
-                <div class="relative aspect-[3/2] overflow-hidden">
-                  <img :src="category.image" :alt="category.name" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                  <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-                  
-                  <div class="absolute top-16px right-16px bg-green text-white px-12px py-6px rounded-full text-14px font-semibold">
-                    {{ category.count }}
-                  </div>
-                  
-                  <div class="absolute bottom-20px left-20px right-20px">
-                    <h3 class="text-24px font-bold text-white mb-4px drop-shadow-lg">{{ category.name }}</h3>
-                    <p class="text-14px text-white/90">{{ category.count }} растений</p>
-                  </div>
-                </div>
-                
-                <div class="p-20px bg-gradient-to-r from-blue to-blue/90">
-                  <div class="flex items-center gap-12px">
-                    <Button variant="white" class="text-14px flex-1 font-medium">
-                      Подробнее
-                    </Button>
-                    <button class="p-10px bg-green text-white rounded-full hover:bg-green/90 transition-all duration-300 hover:scale-110 shadow-lg">
-                      <Icon name="mdi:share" class="w-18px h-18px" />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <Category :category="category" />
           </SwiperSlide>
         </Swiper>
       </div>
@@ -194,44 +167,7 @@ const plants = ref([
           class="plants-swiper !overflow-visible"
         >
           <SwiperSlide v-for="plant in plants" :key="plant.id">
-            <div class="relative group">
-              <div class="bg-gradient-to-br from-gray to-gray-darker rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:scale-105 hover:rotate-1">
-                
-                <div class="relative aspect-[4/3] overflow-hidden">
-                  <img :src="plant.image" :alt="plant.name" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                  
-                  <div class="absolute top-16px left-16px bg-green text-white px-16px py-8px rounded-full text-16px font-bold shadow-lg">
-                    {{ plant.price }} ₸
-                  </div>
-                  
-                  <div class="absolute top-16px right-16px">
-                    <button class="w-40px h-40px bg-white/90 backdrop-blur-sm text-blue rounded-full hover:bg-white hover:scale-110 transition-all duration-300 shadow-lg flex items-center justify-center">
-                      <Icon name="mdi:github" class="w-20px h-20px" />
-                    </button>
-                  </div>
-                </div>
-                
-                <div class="p-24px bg-white relative">
-                  <div class="absolute top-0 right-0 w-0 h-0 border-l-[30px] border-l-transparent border-b-[30px] border-b-green opacity-10"></div>
-                  
-                  <h3 class="text-16px font-bold text-blue mb-12px leading-tight h-[40px] overflow-hidden line-clamp-2">{{ plant.name }}</h3>
-                  
-                  <div class="flex gap-8px mt-20px">
-                    <Button variant="blue" class="text-12px font-medium hover:bg-blue/90 transition-colors duration-300">
-                      Подробнее
-                    </Button>
-                    <button class="text-12px whitespace-nowrap font-medium border-2 border-green text-green bg-white hover:bg-green hover:text-white hover:border-green transition-all duration-300 px-12px py-8px rounded-lg">
-                      В корзину
-                    </button>
-                  </div>
-                </div>
-                
-                <div class="h-4px bg-gradient-to-r from-green via-blue to-green"></div>
-              </div>
-              
-              <div class="absolute -bottom-8px -right-8px w-6px h-6px bg-green rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 delay-100"></div>
-              <div class="absolute -top-8px -left-8px w-4px h-4px bg-blue rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 delay-200"></div>
-            </div>
+            <Plant :plant="plant" />
           </SwiperSlide>
         </Swiper>
       </div>
