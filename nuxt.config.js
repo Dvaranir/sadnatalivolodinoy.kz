@@ -7,6 +7,7 @@ const developmentMode = process.env.NODE_ENV !== "production";
 export default defineNuxtConfig({
 	compatibilityDate: "2024-11-01",
 	devtools: { enabled: developmentMode },
+	ssr: false,
 	sourcemap: {
 		server: developmentMode,
 		client: developmentMode,
@@ -41,7 +42,7 @@ export default defineNuxtConfig({
 
 	runtimeConfig: {
 		public: {
-			apiUrl: process.env.API_URL || "https://yp-dev-crm.checkngo.pro",
+			API_URL: process.env.API_URL || "http://localhost:1337",
 		},
 	},
 

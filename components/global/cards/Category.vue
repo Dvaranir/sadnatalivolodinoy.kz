@@ -20,13 +20,15 @@ const openShareModal = () => {
 const closeShareModal = () => {
   isShareModalOpen.value = false
 }
+
+
 </script>
 
 <template>
   <div class="relative group">
     <div class="bg-white rounded-2xl overflow-hidden shadow-2xl hover:shadow-3xl transition-all duration-500 transform hover:-translate-y-2 hover:rotate-1 hover:scale-105">
       <div class="relative aspect-[3/2] overflow-hidden">
-        <img :src="category.image" :alt="category.name" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+        <img :src="$image(category.images[0].url)" :alt="category.name" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
         <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
         
         <div class="absolute top-16px right-16px bg-green text-white px-12px py-6px rounded-full text-14px font-semibold">

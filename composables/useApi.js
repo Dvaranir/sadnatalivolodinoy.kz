@@ -1,14 +1,35 @@
 export const useApi = () => {
   const config = useRuntimeConfig()
-  const baseUrl = config.public.apiUrl || 'http://localhost:1337'
+  const baseUrl = config.public.API_URL || 'http://localhost:1337'
 
   const buildUrl = (endpoint, params = {}) => {
     const url = new URL(`/api${endpoint}`, baseUrl)
+    
+    const addParam = (key, value, prefix = '') => {
+      const fullKey = prefix ? `${prefix}[${key}]` : key
+      
+      if (Array.isArray(value)) {
+        value.forEach((item, index) => {
+          addParam(index, item, fullKey)
+        })
+      } else if (typeof value === 'object' && value !== null) {
+        Object.entries(value).forEach(([objKey, objValue]) => {
+          addParam(objKey, objValue, fullKey)
+        })
+      } else {
+        url.searchParams.append(fullKey, value)
+      }
+    }
+
     Object.entries(params).forEach(([key, value]) => {
       if (value !== undefined && value !== null) {
-        url.searchParams.append(key, value)
+        if (key === 'locale' && value === 'ru') {
+          return
+        }
+        addParam(key, value)
       }
     })
+    
     return url.toString()
   }
 
