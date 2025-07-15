@@ -5,6 +5,21 @@ const props = defineProps({
     required: true
   }
 })
+
+const isShareModalOpen = ref(false)
+
+const shareData = computed(() => ({
+  url: `${window.location.origin}/plant/${props.plant.id || props.plant.slug || props.plant.name}`,
+  title: `${props.plant.name} - ${props.plant.price} ₸`
+}))
+
+const openShareModal = () => {
+  isShareModalOpen.value = true
+}
+
+const closeShareModal = () => {
+  isShareModalOpen.value = false
+}
 </script>
 
 <template>
@@ -19,7 +34,7 @@ const props = defineProps({
         </div>
         
         <div class="absolute top-16px right-16px">
-          <button class="w-40px h-40px bg-white/90 backdrop-blur-sm text-blue rounded-full hover:bg-white hover:scale-110 transition-all duration-300 shadow-lg flex items-center justify-center">
+          <button class="w-40px h-40px bg-white/90 backdrop-blur-sm text-blue rounded-full hover:bg-white hover:scale-110 transition-all duration-300 shadow-lg flex items-center justify-center" @click="openShareModal">
             <Icon name="mdi:share" class="w-20px h-20px" />
           </button>
         </div>
@@ -45,5 +60,12 @@ const props = defineProps({
     
     <div class="absolute -bottom-8px -right-8px w-6px h-6px bg-green rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 delay-100"></div>
     <div class="absolute -top-8px -left-8px w-4px h-4px bg-blue rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 delay-200"></div>
+    
+    <ShareModal
+      :is-open="isShareModalOpen"
+      :share-url="shareData.url"
+      :title="shareData.title"
+      @close="closeShareModal"
+    />
   </div>
 </template>

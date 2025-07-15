@@ -5,6 +5,21 @@ const props = defineProps({
     required: true
   }
 })
+
+const isShareModalOpen = ref(false)
+
+const shareData = computed(() => ({
+  url: `${window.location.origin}/category/${props.category.id || props.category.slug || props.category.name}`,
+  title: `${props.category.name} - ${props.category.count} растений`
+}))
+
+const openShareModal = () => {
+  isShareModalOpen.value = true
+}
+
+const closeShareModal = () => {
+  isShareModalOpen.value = false
+}
 </script>
 
 <template>
@@ -29,11 +44,18 @@ const props = defineProps({
           <Button variant="white" class="text-14px flex-1 font-medium">
             Подробнее
           </Button>
-          <button class="p-10px bg-green text-white rounded-full hover:bg-green/90 transition-all duration-300 hover:scale-110 shadow-lg">
+          <button class="p-10px bg-green text-white rounded-full hover:bg-green/90 transition-all duration-300 hover:scale-110 shadow-lg" @click="openShareModal">
             <Icon name="mdi:share" class="w-18px h-18px" />
           </button>
         </div>
       </div>
     </div>
+    
+    <ShareModal
+      :is-open="isShareModalOpen"
+      :share-url="shareData.url"
+      :title="shareData.title"
+      @close="closeShareModal"
+    />
   </div>
 </template>
